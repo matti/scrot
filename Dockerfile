@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:18.04 as builder
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y \
@@ -11,4 +11,6 @@ RUN ./autogen.sh
 RUN ./configure
 RUN make
 RUN make install
-RUN cp /usr/local/bin/scrot /scrot
+
+FROM scratch
+COPY --from=builder /usr/local/bin/scrot /scrot
